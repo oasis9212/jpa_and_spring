@@ -8,7 +8,7 @@ public class Jpashop2Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Jpashop2Application.class, args);
-		//asd
+
 	}
 
 }
