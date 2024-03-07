@@ -76,7 +76,7 @@ public class Orders {
 
     // 전체 주문 가격 조회
     public int gettotalPrice(){
-        return orderItems.stream().mapToInt(OrderItem:: getOrderPrice).sum();
+        return orderItems.stream().mapToInt(OrderItem:: getTotalPrice).sum();
     }
 
 }
