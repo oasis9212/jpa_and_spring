@@ -26,7 +26,7 @@ public class OrderRepository {
 
     // 동적 쿼리를 위한 queryDSL 이란것이 있다.
     public List<Orders> findAll(OrderSearch orderSearch){
-        String jpql = "select o From Order o join o.member m";
+        String jpql = "select o From Orders o join o.member m";
         boolean isFirstCondition = true;
 //주문 상태 검색
         if (orderSearch.getOrderStatus() != null) {
@@ -39,22 +39,22 @@ public class OrderRepository {
             jpql += " o.status = :status";
         }
 //회원 이름 검색
-        if (StringUtils.hasText(orderSearch.getMamberName())) {
+        if (StringUtils.hasText(orderSearch.getMemberName())) {
             if (isFirstCondition) {
                 jpql += " where";
                 isFirstCondition = false;
             } else {
                 jpql += " and";
             }
-            jpql += " m.name like :name";
+            jpql += " m.username like :name";
         }
         TypedQuery<Orders> query = em.createQuery(jpql, Orders.class)
                 .setMaxResults(1000); //최대 1000건
         if (orderSearch.getOrderStatus() != null) {
             query = query.setParameter("status", orderSearch.getOrderStatus());
         }
-        if (StringUtils.hasText(orderSearch.getMamberName())) {
-            query = query.setParameter("name", orderSearch.getMamberName());
+        if (StringUtils.hasText(orderSearch.getMemberName())) {
+            query = query.setParameter("name", orderSearch.getMemberName());
         }
         return query.getResultList();
 
