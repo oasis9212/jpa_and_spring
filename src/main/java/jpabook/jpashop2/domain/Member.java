@@ -1,5 +1,6 @@
 package jpabook.jpashop2.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,7 @@ public class Member {
     @Embedded
     private Address address;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<Orders> orders= new ArrayList<>();
 
