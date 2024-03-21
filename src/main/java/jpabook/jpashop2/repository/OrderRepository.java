@@ -78,6 +78,17 @@ public class OrderRepository {
     }
 
 
+    public List<Orders> findAllWithItem() {
 
-
+        // jpa 자체적으로  distinct  Orders 가 같아지면 자동으로 변환해준다.
+        // 1 대 다를 패치 조인하는 순간 패이징 처리가 불가능하자.
+        // firstset / lastset 하는 순간 메모리 자체에서 정렬시킨다.  -> 메모리 뻩을 가능성 높다.
+        return  em.createQuery(
+                "select distinct o from Orders o " +
+                        " join fetch o.member m " +
+                        " join fetch o.delivery d  " +
+                        " join fetch o.orderItems oi " +
+                        " join fetch oi.item i", Orders.class
+                ).getResultList();
+    }
 }
