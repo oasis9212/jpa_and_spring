@@ -7,11 +7,15 @@ import jpabook.jpashop2.domain.OrderStatus;
 import jpabook.jpashop2.domain.Orders;
 import jpabook.jpashop2.repository.OrderRepository;
 import jpabook.jpashop2.repository.OrderSearch;
+
+import jpabook.jpashop2.repository.order.query.OrderQueryDto;
+import jpabook.jpashop2.repository.order.query.OrderQueryRepository;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -24,7 +28,7 @@ import java.util.stream.Collectors;
 public class OrderApiController {
 
     private final OrderRepository orderRepository;
-
+    private  final OrderQueryRepository orderQueryRepository;
     @GetMapping("api/v1/orders")
     public List<Orders> ordersV1(){
           List<Orders> all= orderRepository.findAll(new OrderSearch());
@@ -53,6 +57,21 @@ public class OrderApiController {
                 .map(o-> new OrdersDto(o))
                 .collect(Collectors.toList());
         return list;
+    }
+    @GetMapping("api/v3.1/orders")
+    public List<OrdersDto> ordersV3_paging(  @RequestParam(value = "offset", defaultValue = "0") int offset
+                                           , @RequestParam(value = "limit", defaultValue = "100") int limit
+                                             ){
+        List<Orders> all= orderRepository.findAllWithMemberDelivery(offset,limit);
+        List<OrdersDto>  list= all.stream()
+                .map(o-> new OrdersDto(o))
+                .collect(Collectors.toList());
+        return list;
+    }
+
+    @GetMapping("api/v4/orders")
+    public List<OrderQueryDto> ordersV4(){
+        return   orderQueryRepository.findOrderQueryDtos();
     }
 
 
