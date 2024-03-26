@@ -8,6 +8,8 @@ import jpabook.jpashop2.domain.Orders;
 import jpabook.jpashop2.repository.OrderRepository;
 import jpabook.jpashop2.repository.OrderSearch;
 
+import jpabook.jpashop2.repository.order.query.OrderFlatDto;
+import jpabook.jpashop2.repository.order.query.OrderItemQueryDto;
 import jpabook.jpashop2.repository.order.query.OrderQueryDto;
 import jpabook.jpashop2.repository.order.query.OrderQueryRepository;
 import lombok.Data;
@@ -22,6 +24,9 @@ import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
 
 @RestController
 @RequiredArgsConstructor
@@ -72,6 +77,18 @@ public class OrderApiController {
     @GetMapping("api/v4/orders")
     public List<OrderQueryDto> ordersV4(){
         return   orderQueryRepository.findOrderQueryDtos();
+    }
+    @GetMapping("api/v5/orders")
+    public List<OrderQueryDto> ordersV5(){
+        return   orderQueryRepository.findAllByDto_optimization();
+    }
+
+    @GetMapping("api/v6/orders")
+    public List<OrderFlatDto> ordersV6(){
+        List<OrderFlatDto> flats =   orderQueryRepository.findAllByDto_flat();
+
+        return flats;
+
     }
 
 
