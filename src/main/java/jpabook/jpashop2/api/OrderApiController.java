@@ -71,6 +71,7 @@ public class OrderApiController {
         List<OrdersDto>  list= all.stream()
                 .map(o-> new OrdersDto(o))
                 .collect(Collectors.toList());
+        // @BatchSize 최적화도 가능하다.
         return list;
     }
 
